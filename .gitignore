@@ -40,7 +40,6 @@
 
 # Text editor remnants
 *.swp
-.vscode/*
 
 # Operating system metadata
 .DS_Store
