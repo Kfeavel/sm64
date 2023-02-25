@@ -42,6 +42,9 @@
 *.swp
 .vscode/*
 
+# Operating system metadata
+.DS_Store
+
 # General project-specific ignores
 doxygen/doxygen/*
 build/*
