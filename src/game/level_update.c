@@ -94,13 +94,13 @@ const char *credits08[] = { "3COURSE DESIGNERS", "YOSHIKI HARUHANA", "MAKOTO MIY
 #ifdef VERSION_US
 const char *credits09[] = { "1SOUND COMPOSER", "KOJI KONDO" };
 // ...as well as sound effects and sound programmer in order to make room for screen text writer, Mario voice, and Peach voice
-const char *credits10[] = { "4SOUND EFFECTS", "SOUND PROGRAMMER", "YOJI INAGAKI", "HIDEAKI SHIMIZU" }; 
+const char *credits10[] = { "4SOUND EFFECTS", "SOUND PROGRAMMER", "YOJI INAGAKI", "HIDEAKI SHIMIZU" };
 const char *credits11[] = { "23-D ANIMATORS", "YOSHIAKI KOIZUMI", "SATORU TAKIZAWA" };
 const char *credits12[] = { "1ADDITIONAL GRAPHICS", "MASANAO ARIMOTO" };
 const char *credits13[] = { "3TECHNICAL SUPPORT", "TAKAO SAWANO", "HIROHITO YOSHIMOTO", "HIROTO YADA" };
 const char *credits14[] = { "1TECHNICAL SUPPORT", "SGI N64 PROJECT STAFF" };
 const char *credits15[] = { "2PROGRESS MANAGEMENT", "KIMIYOSHI FUKUI", "KEIZO KATO" };
-const char *credits16[] = { "5SCREEN TEXT WRITER", "TRANSLATION", "LESLIE SWAN", "MINA AKINO", "HIRO YAMADA" }; 
+const char *credits16[] = { "5SCREEN TEXT WRITER", "TRANSLATION", "LESLIE SWAN", "MINA AKINO", "HIRO YAMADA" };
 #else // VERSION_EU
 // ...as well as sound composer, sound effects, and sound programmer, and...
 const char *credits09[] = { "7SOUND COMPOSER", "SOUND EFFECTS", "SOUND PROGRAMMER", "KOJI KONDO", "YOJI INAGAKI", "HIDEAKI SHIMIZU" };
@@ -438,12 +438,10 @@ void init_mario_after_warp(void) {
             play_cap_music(SEQUENCE_ARGS(4, SEQ_EVENT_POWERUP));
         }
 
-#if BUGFIX_KOOPA_RACE_MUSIC
         if (gCurrLevelNum == LEVEL_BOB
             && get_current_background_music() != SEQUENCE_ARGS(4, SEQ_LEVEL_SLIDE) && sTimerRunning) {
             play_music(SEQ_PLAYER_LEVEL, SEQUENCE_ARGS(4, SEQ_LEVEL_SLIDE), 0);
         }
-#endif
 
         if (sWarpDest.levelNum == LEVEL_CASTLE && sWarpDest.areaIdx == 1
 #ifndef VERSION_JP
@@ -574,8 +572,6 @@ s16 music_changed_through_warp(s16 arg) {
     struct ObjectWarpNode *warpNode = area_get_warp_node(arg);
     s16 levelNum = warpNode->node.destLevel & 0x7F;
 
-#if BUGFIX_KOOPA_RACE_MUSIC
-
     s16 destArea = warpNode->node.destArea;
     s16 val4 = TRUE;
     s16 sp2C;
@@ -598,21 +594,6 @@ s16 music_changed_through_warp(s16 arg) {
         }
     }
     return val4;
-
-#else
-
-    u16 val8 = gAreas[warpNode->node.destArea].musicParam;
-    u16 val6 = gAreas[warpNode->node.destArea].musicParam2;
-
-    s16 val4 = levelNum == gCurrLevelNum && val8 == gCurrentArea->musicParam
-               && val6 == gCurrentArea->musicParam2;
-
-    if (get_current_background_music() != val6) {
-        val4 = FALSE;
-    }
-    return val4;
-
-#endif
 }
 
 /**
@@ -919,7 +900,6 @@ void update_hud_values(void) {
             gMarioState->numLives = 100;
         }
 
-#if BUGFIX_MAX_LIVES
         if (gMarioState->numCoins > 999) {
             gMarioState->numCoins = 999;
         }
@@ -927,11 +907,6 @@ void update_hud_values(void) {
         if (gHudDisplay.coins > 999) {
             gHudDisplay.coins = 999;
         }
-#else
-        if (gMarioState->numCoins > 999) {
-            gMarioState->numLives = (s8) 999; //! Wrong variable
-        }
-#endif
 
         gHudDisplay.stars = gMarioState->numStars;
         gHudDisplay.lives = gMarioState->numLives;
